@@ -16,7 +16,11 @@ module.exports = (grunt) ->
       noasm:
         command: 'emcc -o dest/zlib-noasm.raw.js -O2 zpipe.c libz.a -o dest/zpipe.raw.js --closure 0'
 
+    nodeunit:
+      all: ['test.js']
+
+  grunt.loadNpmTasks 'grunt-contrib-nodeunit'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-exec'
 
-  grunt.registerTask 'default', ['exec', 'concat']
+  grunt.registerTask 'default', ['exec', 'concat', 'nodeunit']
