@@ -1,8 +1,10 @@
 var global;
 if (typeof module !== 'undefined' && module.exports) {
   global = module.exports;
-} else {
+} else if(typeof window !== 'undefined') {
   global = window;
+} else {
+  global = this;
 }
 
 global[key] = {
