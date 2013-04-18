@@ -5,7 +5,7 @@ var zlib_asm =
     var outputIndex = -1;
     var ret = new Uint8Array(0x8000);
     var Module = {
-      arguments: decompress ? ['-d'] : []
+      arguments: decompress ? ['-d'] : [],
       stdin: function() {
         return bytes[++inputIndex];
       },
