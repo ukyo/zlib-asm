@@ -1,4 +1,5 @@
-var zlib = {
+var zlib_asm =
+{
   run: function(bytes, decompress) {
     var inputIndex = -1;
     var outputIndex = -1;

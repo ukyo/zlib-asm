@@ -1,4 +1,4 @@
-var zlib = {
+{
   run: function(bytes, decompress) {
     var inputIndex = -1;
     var outputIndex = -1;

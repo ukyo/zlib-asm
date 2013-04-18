@@ -1,4 +1,5 @@
-var zlib = {
+var zlib_noasm =
+{
   run: function(bytes, decompress) {
     var inputIndex = -1;
     var outputIndex = -1;

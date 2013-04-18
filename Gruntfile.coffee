@@ -2,11 +2,11 @@ module.exports = (grunt) ->
   grunt.initConfig
     concat:
       asm:
-        src: ['pre.js', 'dest/zlib-asm.raw.js', 'post.js']
+        src: ['zlib_asm_pre.js',' pre.js', 'dest/zlib-asm.raw.js', 'post.js']
         dest: 'dest/zlib-asm.js'
 
       noasm:
-        src: ['pre.js', 'dest/zlib-noasm.raw.js', 'post.js']
+        src: ['zlib_noasm_pre.js', 'pre.js', 'dest/zlib-noasm.raw.js', 'post.js']
         dest: 'dest/zlib-noasm.js'
 
     exec:
