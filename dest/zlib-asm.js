@@ -1,5 +1,12 @@
-var zlib_asm =
-{
+var key = ['zlib_asm'];
+var global;
+if (module && module.exports) {
+  global = module.exports;
+} else {
+  global = window;
+}
+
+global[key] = {
   run: function(bytes, decompress) {
     var inputIndex = -1;
     var outputIndex = -1;
