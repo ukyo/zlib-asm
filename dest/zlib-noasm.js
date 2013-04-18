@@ -1,6 +1,6 @@
 var key = ['zlib_noasm'];
 var global;
-if (module && module.exports) {
+if (typeof module !== 'undefined' && module.exports) {
   global = module.exports;
 } else {
   global = window;
