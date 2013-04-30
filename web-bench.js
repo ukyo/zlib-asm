@@ -17,7 +17,9 @@ window.onload = function() {
     var comp = window[key].compress(bytes);
     s += 'compress: ' + (Date.now() - start) + 'ms.';
     start = Date.now();
-    window[key].decompress(comp);
+    var _ = new Uint8Array(comp);
+    _.set(comp);
+    window[key].decompress(_);
     s += ' decompress: ' + (Date.now() - start) + 'ms.</div>';
     result.innerHTML += s;
   }
