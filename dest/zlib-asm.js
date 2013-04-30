@@ -9,24 +9,24 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 
 global[key] = {
-  run: function(bytes, decompress) {
+  run: function(inputBytes, decompress) {
     var inputIndex = -1;
     var outputIndex = -1;
-    var returnValue = new Uint8Array(0x8000);
+    var outputBytes = new Uint8Array(0x8000);
     var Module = {
       arguments: decompress ? ['-d'] : [],
       stdin: function() {
-        return bytes[++inputIndex];
+        return inputBytes[++inputIndex];
       },
       stdout: function(x) {
         var tmp;
         if (x !== null) {
-          if (++outputIndex === returnValue.length) {
-            tmp = new Uint8Array(returnValue.length * 2);
-            tmp.set(returnValue);
-            bytes = tmp;
+          if (++outputIndex === outputBytes.length) {
+            tmp = new Uint8Array(outputBytes.length * 2);
+            tmp.set(outputBytes);
+            outputBytes = tmp;
           }
-          returnValue[outputIndex] = x;
+          outputBytes[outputIndex] = x;
         }
       }
     };
@@ -2276,7 +2276,7 @@ run();
   // {{MODULE_ADDITIONS}}
 
     var tmp = new Uint8Array(++outputIndex);
-    tmp.set(returnValue.subarray(0, outputIndex));
+    tmp.set(outputBytes.subarray(0, outputIndex));
     return tmp;
   },
 
