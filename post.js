@@ -1,5 +1,5 @@
     var tmp = new Uint8Array(++outputIndex);
-    tmp.set(returnValue.subarray(0, outputIndex));
+    tmp.set(outputBytes.subarray(0, outputIndex));
     return tmp;
   },
 
