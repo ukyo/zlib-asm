@@ -14,7 +14,14 @@ module.exports = (grunt) ->
         command: 'emcc -O2 zpipe.c libz.a -o dest/zlib-asm.raw.js --closure 0 -s ASM_JS=1'
 
       noasm:
-        command: 'emcc -O2 zpipe.c libz.a -o dest/zlib-noasm.raw.js --closure 0'
+        command: 'emcc -O2 zpipe.c libz.a -o dest/zlib-noasm.raw.js --closure 0 -s ASM_JS=0'
+   
+    connect:
+      server:
+        options:
+          port: 9001
+          keepalive: true
+          base: '.'
 
     nodeunit:
       all: ['test.js']
@@ -22,5 +29,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-nodeunit'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-exec'
+  grunt.loadNpmTasks 'grunt-contrib-connect'
 
   grunt.registerTask 'default', ['exec', 'concat', 'nodeunit']
