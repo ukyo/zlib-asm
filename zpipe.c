@@ -181,9 +181,14 @@ int main(int argc, char **argv)
     SET_BINARY_MODE(stdin);
     SET_BINARY_MODE(stdout);
 
+    FILE *input, *output;
+
+    input = fopen("input", "r");
+    output = fopen("output", "w");
+
     /* do compression if no arguments */
     if (argc == 1) {
-        ret = def(stdin, stdout, Z_DEFAULT_COMPRESSION);
+        ret = def(input, output, Z_DEFAULT_COMPRESSION);
         if (ret != Z_OK)
             zerr(ret);
         return ret;
@@ -191,7 +196,7 @@ int main(int argc, char **argv)
 
     /* do decompression if -d specified */
     else if (argc == 2 && strcmp(argv[1], "-d") == 0) {
-        ret = inf(stdin, stdout);
+        ret = inf(input, output);
         if (ret != Z_OK)
             zerr(ret);
         return ret;
