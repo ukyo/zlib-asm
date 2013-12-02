@@ -1,1 +1,1 @@
-var key = ['zlib_noasm'];
+var key = 'zlib_noasm';

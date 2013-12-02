@@ -1,1 +1,1 @@
-var key = ['zlib_asm'];
+var key = 'zlib_asm';

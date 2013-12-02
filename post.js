@@ -139,3 +139,11 @@
   };
 
 })();
+
+if (typeof module !== 'undefined' && module.exports) {
+  eval('module.exports.' + key + ' = zlib;');
+} else if(typeof window !== 'undefined') {
+  eval('window.' + key + ' = zlib;');
+} else {
+  eval('this.' + key + ' = zlib;');
+}

@@ -1,14 +1,5 @@
-var key = ['zlib_asm'];
-var global;
-if (typeof module !== 'undefined' && module.exports) {
-  global = module.exports;
-} else if(typeof window !== 'undefined') {
-  global = window;
-} else {
-  global = this;
-}
-
-global[key] = (function () {
+var key = 'zlib_asm';
+var zlib = (function () {
   var Module = {
     noInitialRun: true
   };
@@ -5114,3 +5105,11 @@ run();
   };
 
 })();
+
+if (typeof module !== 'undefined' && module.exports) {
+  eval('module.exports.' + key + ' = zlib;');
+} else if(typeof window !== 'undefined') {
+  eval('window.' + key + ' = zlib;');
+} else {
+  eval('this.' + key + ' = zlib;');
+}
