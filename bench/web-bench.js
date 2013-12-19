@@ -14,10 +14,10 @@ window.onload = function() {
   function bench(bytes) {
     var start = Date.now();
     var s = '<div>';
-    var comp = window[key].compress(bytes);
+    var comp = zlib.deflate(bytes);
     s += 'compress: ' + (Date.now() - start) + 'ms.';
     start = Date.now();
-    window[key].decompress(comp);
+    zlib.inflate(comp);
     s += ' decompress: ' + (Date.now() - start) + 'ms.</div>';
     result.innerHTML += s;
   }
