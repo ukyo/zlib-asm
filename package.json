@@ -1,11 +1,14 @@
 {
   "name": "zlib-asm",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-exec": "~0.4.0",
     "grunt-contrib-concat": "~0.2.0",
-    "grunt-contrib-nodeunit": "~0.1.2",
-    "grunt-contrib-connect": "~0.5.0"
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-mkdir": "~0.1.1",
+    "grunt-cafe-mocha": "~0.1.10",
+    "grunt-contrib-watch": "~0.5.3",
+    "chai": "~1.8.1"
   }
 }
