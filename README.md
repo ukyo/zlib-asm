@@ -1,44 +1,119 @@
 # zlib-asm
 
-convert zlib for asm.js.
+zlib for asm.js.
 
-## required
+## APIs
 
+### zlib.deflate(input, level)
+
+It compresses the byte array as a zlib stream.
+
+* @param *{Uint8Array}* input
+* @param *{number}* level (optional: default is `6`)
+* @returns *{Uint8Array}*
+
+### zlib.rawDeflate(input, level)
+
+It compresses the byte array as a raw deflated stream.
+
+* @param *{Uint8Array}* input
+* @param *{number}* level (optional: default is `6`)
+* @returns *{Uint8Array}*
+
+### zlib.inflate(input)
+
+It decompresses the zlib stream.
+
+* @param *{Uint8Array}* input
+* @returns *{Uint8Array}*
+
+
+
+### zlib.rawInflate(input)
+
+It decompresses the raw deflated stream.
+
+* @param *{Uint8Array}* input
+* @returns *{Uint8Array}*
+
+### zlib.stream.deflate({input, streamFn, level, shareMemory})
+
+* @param *{Uint8Array}* input
+* @param *{Function}* streamFn
+* @param *{number}* level (optional: default is `6`)
+* @param *{boolean}* shareMemory (optional: default is `false`)
+
+```js
+zlib.stream.deflate({
+    input: sourcefile,
+    streamFn: function (chunk) {
+        // End of stream
+        if (chunk === null) return;
+        // WebSocket connection.
+        connection.send(chunk);
+    },
+    shareMemory: true // use the heap of Emscripten directly.
+})
+```
+
+### zlib.stream.rawDeflate({input, streamFn, level, shareMemory})
+
+* @param *{Uint8Array}* input
+* @param *{Function}* streamFn
+* @param *{number}* level (optional: default is `6`)
+* @param *{boolean}* shareMemory (optional: default is `false`)
+
+### zlib.stream.inflate({input, streamFn, shareMemory})
+
+* @param *{Uint8Array}* input
+* @param *{Function}* streamFn
+* @param *{boolean}* shareMemory (optional: default is `false`)
+
+### zlib.stream.rawInflate({input, streamFn, shareMemory})
+
+* @param *{Uint8Array}* input
+* @param *{Function}* streamFn
+* @param *{boolean}* shareMemory (optional: default is `false`)
+
+## Development
+
+It is required below to build zlib-asm.
+
+* llvm 3.2
 * [kripken/emscripten · GitHub](https://github.com/kripken/emscripten)
-* [odinmonkey](http://hg.mozilla.org/users/lwagner_mozilla.com/odinmonkey) - for bench
 * grunt
 
-## build
 
-install grunt-cli.
+Install grunt-cli.
 
 ```
 npm install -g grunt-cli
 ```
 
-install npm packages.
+Install npm packages.
 
 ```
 npm install
 ```
 
-run grunt tasks.
+Init zlib and dev dir.
 
 ```
-grunt
+grunt init
 ```
 
-## bench
-
-
-### console
+Write codes and test.
 
 ```
-time path/to/odinmonkey/js -f dest/zlib-asm.js bench-asm.js
-time path/to/odinmonkey/js -f dest/zlib-noasm.js bench-noasm.js
+grunt watch
 ```
 
-### web
+Build for release.
 
-* [asm](http://ukyo.github.io/zlib-asm/bench-asm.html)
-* [no asm](http://ukyo.github.io/zlib-asm/bench-noasm.html)
+```
+grunt release
+```
+
+## Benchmark
+
+* [benchmark page](http://ukyo.github.io/zlib-asm/bench)
