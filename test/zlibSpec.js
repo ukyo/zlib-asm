@@ -1,21 +1,214 @@
-var zlib_asm = require('./dest/zlib-asm').zlib_asm;
-var zlib_noasm = require('./dest/zlib-noasm').zlib_noasm;
+var expect = require('chai').expect;
+var fs = require('fs');
+var source = new Uint8Array(Array.prototype.slice.call(fs.readFileSync('test/source.txt')));
+var comped = new Uint8Array(Array.prototype.slice.call(fs.readFileSync('test/comped.zlib')));
 
-exports.testZlib = function(test) {
-  var bytes = new Uint8Array(100000);
-  var asm = zlib_asm.compress(bytes);
-  var noasm = zlib_asm.compress(bytes);
-  test.equal(asm.length, noasm.length, 'check lengths');
-  for(var i = 0; i < asm.length; ++i) {
-    test.equal(asm[i], noasm[i], 'check all items');
-  }
-  var asm2 = zlib_asm.decompress(asm);
-  var noasm2 = zlib_noasm.decompress(asm);
-  test.equal(asm2.length, noasm2.length, 'check lengths');
-  test.equal(asm2.length, bytes.length, 'check lengths');
-  for(i = 0; i < 100000; ++i) {
-    test.equal(asm2[i], noasm2[i]);
-    test.equal(asm2[i], bytes[i]);
-  }
-  test.done();
+function sameAll(a, b) {
+  return Array.prototype.every.call(a, function (_, i) {
+    return a[i] === b[i];
+  });
 }
+
+describe('zlib', function () {
+  it('should be defined.', function () {
+    expect(zlib).to.be.an('object');
+  });
+});
+
+describe('zlib.inflate', function () {
+  it('should be defined.', function () {
+    expect(zlib.inflate).to.be.a('function');
+  });
+
+  it('should decompress the zlib stream correctly.', function () {
+    var s = zlib.inflate(comped);
+    expect(s.length).to.equal(source.length);
+    expect(sameAll(s, source)).to.be.true;
+  })
+});
+
+describe('zlib.deflate', function () {
+  it('should be defined.', function () {
+    expect(zlib.deflate).to.be.a('function');
+  });
+
+  it('should compress the source as a valid zlib stream.', function () {
+    var c = zlib.deflate(source);
+    var s = zlib.inflate(c);
+    expect(s.length).to.equal(source.length);
+    expect(sameAll(s, source)).to.be.true;
+  });
+});
+
+describe('zlib.rawInflate', function () {
+  it('should be defined.', function () {
+    expect(zlib.rawInflate).to.be.a('function');
+  });
+
+  it('should decompress the raw deflated stream correctly.', function () {
+    var s = zlib.rawInflate(comped.subarray(2, -4));
+    expect(s.length).to.equal(source.length);
+    expect(sameAll(s, source)).to.be.true;
+  })
+});
+
+describe('zlib.rawDeflate', function () {
+  it('should be defined.', function () {
+    expect(zlib.rawDeflate).to.be.a('function');
+  });
+
+  it('should compress the source as a valid deflated stream.', function () {
+    var c = zlib.rawDeflate(source);
+    var s = zlib.rawInflate(c);
+    expect(s.length).to.equal(source.length);
+    expect(sameAll(s, source)).to.be.true;
+  })
+});
+
+describe('zlib.stream', function () {
+  it('should be defined.', function () {
+    expect(zlib.stream).to.be.an('object');
+  });
+});
+
+function concatChunks (chunks) {
+  var size = chunks.map(function (chunk) { return chunk.length }).reduce(function (a, b) { return a + b });
+  var ret = new Uint8Array(size);
+  var offset = 0;
+  chunks.forEach(function (chunk) {
+    ret.set(chunk, offset);
+    offset += chunk.length;
+  });
+  return ret;
+}
+
+describe('zlib.stream.inflate', function () {
+  it('should be defined.', function () {
+    expect(zlib.stream.inflate).to.be.a('function');
+  });
+
+  it('should set Uint8Array to the argument of callbacks and set null to the argument of the last callback.', function () {
+    var chunks = [];
+    zlib.stream.inflate({
+      input: comped,
+      streamFn: chunks.push.bind(chunks)
+    });
+    expect(chunks.pop()).to.be.null;
+    chunks.forEach(function (chunk) {
+      expect(chunk).to.be.a.instanceof(Uint8Array);
+    });
+  });
+
+  it('should share buffer if set true to the "shareMemory" option.', function () {
+    var chunks = [];
+    zlib.stream.inflate({
+      input: comped,
+      streamFn: chunks.push.bind(chunks),
+      shareMemory: true
+    });
+    expect(chunks.pop()).to.be.null;
+    var c = chunks.pop();
+    chunks.forEach(function (chunk) {
+      expect(c.buffer).to.equal(chunk.buffer);
+      expect(c.byteOffset).to.equal(chunk.byteOffset);
+    });
+  })
+
+  it('should decompress the zlib stream correctly.', function () {
+    var offset = 0;
+    zlib.stream.inflate({
+      input: comped,
+      streamFn: function (chunk) {
+        if (chunk === null) return;
+        expect(sameAll(chunk, source.subarray(offset, offset + chunk.length))).to.be.true;
+        offset += chunk.length;
+      },
+      shareMemory: true
+    });
+  });
+});
+
+describe('zlib.stream.deflate', function () {
+  it('should be defined', function () {
+    expect(zlib.stream.deflate).to.be.a('function');
+  });
+
+  it('should set Uint8Array to the argument of callbacks and set null to the argument of the last callback.', function () {
+    var chunks = [];
+    zlib.stream.deflate({
+      input: source,
+      streamFn: function (chunk) {
+        chunks.push(chunk);
+      }
+    });
+    expect(chunks.pop()).to.be.null;
+    chunks.forEach(function (chunk) {
+      expect(chunk).to.be.a.instanceof(Uint8Array);
+    });
+  });
+
+  it('should compress the source as a valid zlib stream.', function () {
+    var chunks = [];
+    var offset = 0;
+    zlib.stream.deflate({
+      input: source,
+      streamFn: chunks.push.bind(chunks)
+    });
+    chunks.pop();
+    var c = concatChunks(chunks);
+    zlib.stream.inflate({
+      input: c,
+      streamFn: function (chunk) {
+        if (chunk === null) return;
+        expect(sameAll(chunk, source.subarray(offset, offset + chunk.length))).to.be.true;
+        offset += chunk.length;
+      },
+      shareMemory: true
+    });
+  })
+});
+
+describe('zlib.stream.rawInflate', function () {
+  it('should be defined.', function () {
+    expect(zlib.stream.rawInflate).to.be.a('function');
+  });
+
+  it('should decompress the raw deflated stream correctly.', function () {
+    var offset = 0;
+    zlib.stream.rawInflate({
+      input: comped.subarray(2, -4),
+      streamFn: function (chunk) {
+        if (chunk === null) return;
+        expect(sameAll(chunk, source.subarray(offset, offset + chunk.length))).to.be.true;
+        offset += chunk.length;
+      },
+      shareMemory: true
+    });
+  });
+});
+
+describe('zlib.stream.rawDeflate', function () {
+  it('should be defined', function () {
+    expect(zlib.stream.rawDeflate).to.be.a('function');
+  });
+
+  it('should compress the as a valid deflated stream', function () {
+    var chunks = [];
+    var offset = 0;
+    zlib.stream.rawDeflate({
+      input: source,
+      streamFn: chunks.push.bind(chunks)
+    });
+    chunks.pop();
+    var c = concatChunks(chunks);
+    zlib.stream.rawInflate({
+      input: c,
+      streamFn: function (chunk) {
+        if (chunk === null) return;
+        expect(sameAll(chunk, source.subarray(offset, offset + chunk.length))).to.be.true;
+        offset += chunk.length;
+      },
+      shareMemory: true
+    });
+  })
+});
