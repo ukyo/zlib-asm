@@ -1,10 +1,13 @@
 module.exports = (grunt) ->
   grunt.initConfig
+    pkg: grunt.file.readJSON 'package.json'
     concat:
       dev:
         src: ['src/header.js', 'src/pre.js', 'dev/_zlib.js', 'src/post.js', 'src/footer.js']
         dest: 'dev/zlib.js'
       release:
+        options:
+          banner: '/*! <%= pkg.name %> v<%= pkg.version %> https://github.com/ukyo/zlib-asm */'
         src: ['src/header.js', '_zlib.js', 'src/footer.js']
         dest: 'zlib.js'
       testDev:
