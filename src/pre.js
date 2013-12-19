@@ -1,6 +1,2 @@
-var zlib = (function () {
-  var Module = {
-    noInitialRun: true
-  };
-
-
+var Module = {};
+Module['TOTAL_MEMORY'] = 8 * 1024 * 1024;
