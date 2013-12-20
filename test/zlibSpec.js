@@ -110,7 +110,25 @@ describe('zlib.stream.inflate', function () {
       expect(c.buffer).to.equal(chunk.buffer);
       expect(c.byteOffset).to.equal(chunk.byteOffset);
     });
-  })
+  });
+
+  it('should change the chunk size if change the "chunkSize" option.', function () {
+    var chunks = [];
+    zlib.stream.inflate({
+      input: comped,
+      streamFn: chunks.push.bind(chunks),
+      shareMemory: true
+    });
+    expect(chunks.shift().length).to.equal(0x8000); // default size
+    var chunks = [];
+    zlib.stream.inflate({
+      input: comped,
+      streamFn: chunks.push.bind(chunks),
+      shareMemory: true,
+      chunkSize: 0xf000
+    });
+    expect(chunks.shift().length).to.equal(0xf000);
+  });
 
   it('should decompress the zlib stream correctly.', function () {
     var offset = 0;

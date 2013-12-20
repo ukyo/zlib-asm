@@ -15,12 +15,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdlib.h>
 #include "zlib.h"
-
-#define CHUNK 0x8000
-
-unsigned char in[CHUNK];
-unsigned char out[CHUNK];
 
 /* Compress from file source to file dest until EOF on source.
    def() returns Z_OK on success, Z_MEM_ERROR if memory could not be
@@ -28,13 +24,11 @@ unsigned char out[CHUNK];
    level is supplied, Z_VERSION_ERROR if the version of zlib.h and the
    version of the library linked do not match, or Z_ERRNO if there is
    an error reading or writing the files. */
-int def(FILE *source, FILE *dest, int level, int zlib_header)
+int def(FILE *source, FILE *dest, int level, int zlib_header, unsigned char* in, unsigned char* out, int chunk_size)
 {
     int ret, flush;
     unsigned have;
     z_stream strm;
-    // unsigned char in[CHUNK];
-    // unsigned char out[CHUNK];
 
     /* allocate deflate state */
     strm.zalloc = Z_NULL;
@@ -48,7 +42,7 @@ int def(FILE *source, FILE *dest, int level, int zlib_header)
 
     /* compress until end of file */
     do {
-        strm.avail_in = fread(in, 1, CHUNK, source);
+        strm.avail_in = fread(in, 1, chunk_size, source);
         if (ferror(source)) {
             (void)deflateEnd(&strm);
             return Z_ERRNO;
@@ -59,11 +53,11 @@ int def(FILE *source, FILE *dest, int level, int zlib_header)
         /* run deflate() on input until output buffer not full, finish
            compression if all of source has been read in */
         do {
-            strm.avail_out = CHUNK;
+            strm.avail_out = chunk_size;
             strm.next_out = out;
             ret = deflate(&strm, flush);    /* no bad return value */
             assert(ret != Z_STREAM_ERROR);  /* state not clobbered */
-            have = CHUNK - strm.avail_out;
+            have = chunk_size - strm.avail_out;
             if (fwrite(out, 1, have, dest) != have || ferror(dest)) {
                 (void)deflateEnd(&strm);
                 return Z_ERRNO;
@@ -86,13 +80,11 @@ int def(FILE *source, FILE *dest, int level, int zlib_header)
    invalid or incomplete, Z_VERSION_ERROR if the version of zlib.h and
    the version of the library linked do not match, or Z_ERRNO if there
    is an error reading or writing the files. */
-int inf(FILE *source, FILE *dest, int zlib_header)
+int inf(FILE *source, FILE *dest, int zlib_header, unsigned char* in, unsigned char* out, int chunk_size)
 {
     int ret;
     unsigned have;
     z_stream strm;
-    // unsigned char in[CHUNK];
-    // unsigned char out[CHUNK];
 
     /* allocate inflate state */
     strm.zalloc = Z_NULL;
@@ -106,7 +98,7 @@ int inf(FILE *source, FILE *dest, int zlib_header)
 
     /* decompress until deflate stream ends or end of file */
     do {
-        strm.avail_in = fread(in, 1, CHUNK, source);
+        strm.avail_in = fread(in, 1, chunk_size, source);
         if (ferror(source)) {
             (void)inflateEnd(&strm);
             return Z_ERRNO;
@@ -117,7 +109,7 @@ int inf(FILE *source, FILE *dest, int zlib_header)
 
         /* run inflate() on input until output buffer not full */
         do {
-            strm.avail_out = CHUNK;
+            strm.avail_out = chunk_size;
             strm.next_out = out;
             ret = inflate(&strm, Z_NO_FLUSH);
             assert(ret != Z_STREAM_ERROR);  /* state not clobbered */
@@ -129,7 +121,7 @@ int inf(FILE *source, FILE *dest, int zlib_header)
                 (void)inflateEnd(&strm);
                 return ret;
             }
-            have = CHUNK - strm.avail_out;
+            have = chunk_size - strm.avail_out;
             if (fwrite(out, 1, have, dest) != have || ferror(dest)) {
                 (void)inflateEnd(&strm);
                 return Z_ERRNO;
@@ -144,23 +136,33 @@ int inf(FILE *source, FILE *dest, int zlib_header)
     return ret == Z_STREAM_END ? Z_OK : Z_DATA_ERROR;
 }
 
-int deflate_file(int level, int zlib_header) {
+int deflate_file(int level, int zlib_header, int chunk_size) {
     FILE *input, *output;
+    unsigned char *in, *out;
     int ret;
+    in = (unsigned char *)malloc(sizeof(char) * chunk_size);
+    out = (unsigned char *)malloc(sizeof(char) * chunk_size);
     input = fopen("input", "r");
     output = fopen("output", "w");
-    ret = def(input, output, level, zlib_header);
+    ret = def(input, output, level, zlib_header, in, out, chunk_size);
+    free(in);
+    free(out);
     fclose(input);
     fclose(output);
     return ret;
 }
 
-int inflate_file(int zlib_header) {
+int inflate_file(int zlib_header, int chunk_size) {
     FILE *input, *output;
+    unsigned char *in, *out;
     int ret;
+    in = (unsigned char *)malloc(sizeof(char) * chunk_size);
+    out = (unsigned char *)malloc(sizeof(char) * chunk_size);
     input = fopen("input", "r");
     output = fopen("output", "w");
-    ret = inf(input, output, zlib_header);
+    ret = inf(input, output, zlib_header, in, out, chunk_size);
+    free(in);
+    free(out);
     fclose(input);
     fclose(output);
     return ret;

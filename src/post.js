@@ -137,15 +137,16 @@ function init (input, streamFn, shareMemory) {
 }
 
 var DEFAULT_COMPRESSION_LEVEL = 6;
+var DEFAULT_CHUNK_SIZE = 0x8000;
 
-function deflate (input, streamFn, level, shareMemory, zlibHeader) {
+function deflate (input, streamFn, level, shareMemory, zlibHeader, chunkSize) {
   init(input, streamFn, shareMemory);
-  return _deflate_file(level || DEFAULT_COMPRESSION_LEVEL, zlibHeader);
+  return _deflate_file(level || DEFAULT_COMPRESSION_LEVEL, zlibHeader, chunkSize || DEFAULT_CHUNK_SIZE);
 }
 
-function inflate (input, streamFn, shareMemory, zlibHeader) {
+function inflate (input, streamFn, shareMemory, zlibHeader, chunkSize) {
   init(input, streamFn, shareMemory);
-  return _inflate_file(zlibHeader);
+  return _inflate_file(zlibHeader, chunkSize || DEFAULT_CHUNK_SIZE);
 }
 
 var zlib = this;
@@ -161,15 +162,15 @@ function concatChunks (chunks) {
   return ret;
 }
 
-function zlibDeflate (zlibHeader, input, level) {
+function zlibDeflate (zlibHeader, input, level, chunkSize) {
   var chunks = [];
-  validate(deflate(input, chunks.push.bind(chunks), level, false, zlibHeader));
+  validate(deflate(input, chunks.push.bind(chunks), level, false, zlibHeader, chunkSize));
   return concatChunks(chunks);
 }
 
-function zlibInflate (zlibHeader, input) {
+function zlibInflate (zlibHeader, input, chunkSize) {
   var chunks = [];
-  validate(inflate(input, chunks.push.bind(chunks), false, zlibHeader));
+  validate(inflate(input, chunks.push.bind(chunks), false, zlibHeader, chunkSize));
   return concatChunks(chunks);
 }
 
@@ -181,11 +182,11 @@ zlib['rawInflate'] = zlibInflate.bind(null, -1);
 var zlibStream = zlib['stream'] = {};
 
 function zlibStreamDeflate (zlibHeader, params) {
-  validate(deflate(params['input'], params['streamFn'], params['level'], params['shareMemory'], zlibHeader));
+  validate(deflate(params['input'], params['streamFn'], params['level'], params['shareMemory'], zlibHeader, params['chunkSize']));
 }
 
 function zlibSteamInflate (zlibHeader, params) {
-  validate(inflate(params['input'], params['streamFn'], params['shareMemory'], zlibHeader));
+  validate(inflate(params['input'], params['streamFn'], params['shareMemory'], zlibHeader, params['chunkSize']));
 }
 
 zlibStream['deflate'] = zlibStreamDeflate.bind(null, 1);

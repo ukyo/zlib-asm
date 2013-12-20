@@ -4,44 +4,49 @@ zlib for asm.js.
 
 ## APIs
 
-### zlib.deflate(input, level)
+### zlib.deflate(input, level, chunkSize)
 
 It compresses the byte array as a zlib stream.
 
 * @param *{Uint8Array}* input
 * @param *{number}* level (optional: default is `6`)
+* @param *{number}* chunkSize (optional: default is `32768`)
 * @returns *{Uint8Array}*
 
-### zlib.rawDeflate(input, level)
+### zlib.rawDeflate(input, level, chunkSize)
 
 It compresses the byte array as a raw deflated stream.
 
 * @param *{Uint8Array}* input
 * @param *{number}* level (optional: default is `6`)
+* @param *{number}* chunkSize (optional: default is `32768`)
 * @returns *{Uint8Array}*
 
-### zlib.inflate(input)
+### zlib.inflate(input, chunkSize)
 
 It decompresses the zlib stream.
 
 * @param *{Uint8Array}* input
+* @param *{number}* chunkSize (optional: default is `32768`)
 * @returns *{Uint8Array}*
 
 
 
-### zlib.rawInflate(input)
+### zlib.rawInflate(input, chunkSize)
 
 It decompresses the raw deflated stream.
 
 * @param *{Uint8Array}* input
+* @param *{number}* chunkSize (optional: default is `32768`)
 * @returns *{Uint8Array}*
 
-### zlib.stream.deflate({input, streamFn, level, shareMemory})
+### zlib.stream.deflate({input, streamFn, level, shareMemory, chunkSize})
 
 * @param *{Uint8Array}* input
 * @param *{Function}* streamFn
 * @param *{number}* level (optional: default is `6`)
 * @param *{boolean}* shareMemory (optional: default is `false`)
+* @param *{number}* chunkSize (optional: default is `32768`)
 
 ```js
 zlib.stream.deflate({
@@ -54,24 +59,27 @@ zlib.stream.deflate({
 })
 ```
 
-### zlib.stream.rawDeflate({input, streamFn, level, shareMemory})
+### zlib.stream.rawDeflate({input, streamFn, level, shareMemory, chunkSize})
 
 * @param *{Uint8Array}* input
 * @param *{Function}* streamFn
 * @param *{number}* level (optional: default is `6`)
 * @param *{boolean}* shareMemory (optional: default is `false`)
+* @param *{number}* chunkSize (optional: default is `32768`)
 
-### zlib.stream.inflate({input, streamFn, shareMemory})
-
-* @param *{Uint8Array}* input
-* @param *{Function}* streamFn
-* @param *{boolean}* shareMemory (optional: default is `false`)
-
-### zlib.stream.rawInflate({input, streamFn, shareMemory})
+### zlib.stream.inflate({input, streamFn, shareMemory, chunkSize})
 
 * @param *{Uint8Array}* input
 * @param *{Function}* streamFn
 * @param *{boolean}* shareMemory (optional: default is `false`)
+* @param *{number}* chunkSize (optional: default is `32768`)
+
+### zlib.stream.rawInflate({input, streamFn, shareMemory, chunkSize})
+
+* @param *{Uint8Array}* input
+* @param *{Function}* streamFn
+* @param *{boolean}* shareMemory (optional: default is `false`)
+* @param *{number}* chunkSize (optional: default is `32768`)
 
 ## Development
 
