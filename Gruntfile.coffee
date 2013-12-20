@@ -7,7 +7,7 @@ module.exports = (grunt) ->
         dest: 'dev/zlib.js'
       release:
         options:
-          banner: '/*! <%= pkg.name %> v<%= pkg.version %> https://github.com/ukyo/zlib-asm */'
+          banner: '/*! <%= pkg.name %> v<%= pkg.version %> Released under the zlib license. https://github.com/ukyo/zlib-asm/LICENSE */'
         src: ['src/header.js', '_zlib.js', 'src/footer.js']
         dest: 'zlib.js'
       testDev:
