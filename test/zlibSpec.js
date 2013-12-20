@@ -87,13 +87,12 @@ describe('zlib.stream.inflate', function () {
     expect(zlib.stream.inflate).to.be.a('function');
   });
 
-  it('should set Uint8Array to the argument of callbacks and set null to the argument of the last callback.', function () {
+  it('should set Uint8Array to the argument of callbacks.', function () {
     var chunks = [];
     zlib.stream.inflate({
       input: comped,
       streamFn: chunks.push.bind(chunks)
     });
-    expect(chunks.pop()).to.be.null;
     chunks.forEach(function (chunk) {
       expect(chunk).to.be.a.instanceof(Uint8Array);
     });
@@ -106,7 +105,6 @@ describe('zlib.stream.inflate', function () {
       streamFn: chunks.push.bind(chunks),
       shareMemory: true
     });
-    expect(chunks.pop()).to.be.null;
     var c = chunks.pop();
     chunks.forEach(function (chunk) {
       expect(c.buffer).to.equal(chunk.buffer);
@@ -119,7 +117,6 @@ describe('zlib.stream.inflate', function () {
     zlib.stream.inflate({
       input: comped,
       streamFn: function (chunk) {
-        if (chunk === null) return;
         expect(sameAll(chunk, source.subarray(offset, offset + chunk.length))).to.be.true;
         offset += chunk.length;
       },
@@ -141,7 +138,6 @@ describe('zlib.stream.deflate', function () {
         chunks.push(chunk);
       }
     });
-    expect(chunks.pop()).to.be.null;
     chunks.forEach(function (chunk) {
       expect(chunk).to.be.a.instanceof(Uint8Array);
     });
@@ -154,12 +150,10 @@ describe('zlib.stream.deflate', function () {
       input: source,
       streamFn: chunks.push.bind(chunks)
     });
-    chunks.pop();
     var c = concatChunks(chunks);
     zlib.stream.inflate({
       input: c,
       streamFn: function (chunk) {
-        if (chunk === null) return;
         expect(sameAll(chunk, source.subarray(offset, offset + chunk.length))).to.be.true;
         offset += chunk.length;
       },
@@ -178,7 +172,6 @@ describe('zlib.stream.rawInflate', function () {
     zlib.stream.rawInflate({
       input: comped.subarray(2, -4),
       streamFn: function (chunk) {
-        if (chunk === null) return;
         expect(sameAll(chunk, source.subarray(offset, offset + chunk.length))).to.be.true;
         offset += chunk.length;
       },
@@ -199,12 +192,10 @@ describe('zlib.stream.rawDeflate', function () {
       input: source,
       streamFn: chunks.push.bind(chunks)
     });
-    chunks.pop();
     var c = concatChunks(chunks);
     zlib.stream.rawInflate({
       input: c,
       streamFn: function (chunk) {
-        if (chunk === null) return;
         expect(sameAll(chunk, source.subarray(offset, offset + chunk.length))).to.be.true;
         offset += chunk.length;
       },

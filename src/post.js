@@ -182,12 +182,10 @@ var zlibStream = zlib['stream'] = {};
 
 function zlibStreamDeflate (zlibHeader, params) {
   validate(deflate(params['input'], params['streamFn'], params['level'], params['shareMemory'], zlibHeader));
-  params['streamFn'](null);    
 }
 
 function zlibSteamInflate (zlibHeader, params) {
   validate(inflate(params['input'], params['streamFn'], params['shareMemory'], zlibHeader));
-  params['streamFn'](null);
 }
 
 zlibStream['deflate'] = zlibStreamDeflate.bind(null, 1);

@@ -47,8 +47,6 @@ It decompresses the raw deflated stream.
 zlib.stream.deflate({
     input: sourcefile,
     streamFn: function (chunk) {
-        // End of stream
-        if (chunk === null) return;
         // WebSocket connection.
         connection.send(chunk);
     },
