@@ -1,0 +1,22 @@
+{
+  "name": "zlib-asm",
+  "version": "0.2.0",
+  "homepage": "https://github.com/ukyo/zlib-asm",
+  "authors": [
+    "ukyo <ukyo.web@gmail.com>"
+  ],
+  "description": "zlib for browser ported with Emscripten",
+  "main": "zlib.js",
+  "keywords": [
+    "zlib",
+    "compression",
+    "emscripten"
+  ],
+  "license": "zlib",
+  "ignore": [
+    "zlib",
+    "node_modules",
+    "test",
+    "bench"
+  ]
+}

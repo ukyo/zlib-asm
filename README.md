@@ -2,6 +2,20 @@
 
 zlib for asm.js.
 
+## Install and Use
+
+Install
+
+```
+bower install zlib-asm
+```
+
+Use
+
+```
+<script src="path/to/bower_components/zlib-asm/zlib.js"></script>
+```
+
 ## APIs
 
 ### zlib.deflate(input, level, chunkSize)
