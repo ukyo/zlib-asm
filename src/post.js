@@ -89,9 +89,6 @@ var MYFS = {
   writeStreamFn: null
 };
 
-// MYFSをマウント。絶対必要！  
-FS.mount(MYFS, {}, '/');
-
 function zerror (message) {
   throw new Error('zlib-asm: ' + message);
 }

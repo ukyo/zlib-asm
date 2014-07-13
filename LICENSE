@@ -4,7 +4,7 @@ Original codes are written by
 
 zlib-asm is ported with Emscripten.
 
-(c) 2013 Syu Kato <ukyo.web@gmail.com>
+(c) 2013-2014 Syu Kato <ukyo.web@gmail.com>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages

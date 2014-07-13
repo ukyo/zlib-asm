@@ -97,12 +97,9 @@ zlib.stream.deflate({
 
 ## Development
 
-It is required below to build zlib-asm.
+Install emsdk
 
-* llvm 3.2
-* [kripken/emscripten · GitHub](https://github.com/kripken/emscripten)
-* grunt
-
+[Emscripten SDK · kripken/emscripten Wiki](https://github.com/kripken/emscripten/wiki/Emscripten-SDK)
 
 Install grunt-cli.
 
