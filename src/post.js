@@ -138,7 +138,7 @@ var DEFAULT_CHUNK_SIZE = 0x8000;
 
 function deflate (input, streamFn, level, shareMemory, zlibHeader, chunkSize) {
   init(input, streamFn, shareMemory);
-  return _deflate_file(level || DEFAULT_COMPRESSION_LEVEL, zlibHeader, chunkSize || DEFAULT_CHUNK_SIZE);
+  return _deflate_file(level != null ? level : DEFAULT_COMPRESSION_LEVEL, zlibHeader, chunkSize || DEFAULT_CHUNK_SIZE);
 }
 
 function inflate (input, streamFn, shareMemory, zlibHeader, chunkSize) {
