@@ -24,7 +24,7 @@ module.exports = (grunt) ->
       compileDev:
         cmd: '''emcc -O2 src/zpipe.c zlib/libz.a -o dev/_zlib.js -s EXPORTED_FUNCTIONS="['_deflate_file', '_inflate_file']"'''
       compileRelease:
-        cmd: '''emcc -Oz --llvm-lto 1 --closure 1 src/zpipe.c zlib/libz.a -o _zlib.js --pre-js src/pre.js --post-js src/post.js -s EXPORTED_FUNCTIONS="['_deflate_file', '_inflate_file']"'''
+        cmd: '''emcc -O3 --llvm-lto 1 --closure 1 src/zpipe.c zlib/libz.a -o _zlib.js --pre-js src/pre.js --post-js src/post.js -s EXPORTED_FUNCTIONS="['_deflate_file', '_inflate_file']"'''
 
     clean:
       release: '_zlib.js'
