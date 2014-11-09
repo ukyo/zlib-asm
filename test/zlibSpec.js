@@ -49,7 +49,14 @@ describe('zlib.rawInflate', function () {
     var s = zlib.rawInflate(comped.subarray(2, -4));
     expect(s.length).to.equal(source.length);
     expect(sameAll(s, source)).to.be.true;
-  })
+  });
+
+  it('should decompress the raw deflated zero-length data correctly.', function () {
+    var data = new Uint8Array(0);
+    var def = zlib.rawDeflate(data);
+    var inf = zlib.rawInflate(def);
+    expect(inf.length).to.equal(0);
+  });
 });
 
 describe('zlib.rawDeflate', function () {

@@ -149,7 +149,7 @@ function inflate (input, streamFn, shareMemory, zlibHeader, chunkSize) {
 var zlib = this;
 
 function concatChunks (chunks) {
-  var size = chunks.map(function (chunk) { return chunk.length }).reduce(function (a, b) { return a + b });
+  var size = chunks.map(function (chunk) { return chunk.length }).reduce(function (a, b) { return a + b }, 0);
   var ret = new Uint8Array(size);
   var offset = 0;
   chunks.forEach(function (chunk) {
