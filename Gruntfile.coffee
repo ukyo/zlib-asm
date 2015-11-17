@@ -20,11 +20,11 @@ module.exports = (grunt) ->
     exec:
       initZlib:
         cwd: 'zlib'
-        cmd: 'emconfigure ./configure && make'
+        cmd: '''emconfigure ./configure && sed -i -e 's/^AR=.*$/AR=emar/g' Makefile && sed -i -e 's/^ARFLAGS=.*$/ARFLAGS=rc/g' Makefile && make'''
       compileDev:
-        cmd: '''emcc -O2 src/zpipe.c zlib/libz.a -o dev/_zlib.js -s EXPORTED_FUNCTIONS="['_deflate_file', '_inflate_file']"'''
+        cmd: '''emcc --memory-init-file 0 -Izlib/ -O2 src/zpipe.c zlib/libz.a -o dev/_zlib.js -s EXPORTED_FUNCTIONS="['_deflate_file', '_inflate_file']"'''
       compileRelease:
-        cmd: '''emcc -O3 --llvm-lto 1 --closure 1 src/zpipe.c zlib/libz.a -o _zlib.js --pre-js src/pre.js --post-js src/post.js -s EXPORTED_FUNCTIONS="['_deflate_file', '_inflate_file']"'''
+        cmd: '''emcc --memory-init-file 0 -Izlib/ -O3 --llvm-lto 1 --closure 1 src/zpipe.c zlib/libz.a -o _zlib.js --pre-js src/pre.js --post-js src/post.js -s EXPORTED_FUNCTIONS="['_deflate_file', '_inflate_file']"'''
 
     clean:
       release: '_zlib.js'
