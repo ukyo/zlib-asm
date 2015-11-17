@@ -36,6 +36,8 @@ module.exports = (grunt) ->
           create: ['dev']
 
     cafemocha:
+      options:
+        timeout: 10000
       dev:
         src: 'test/zlibDevSpec.js'
       release:
