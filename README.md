@@ -10,6 +10,10 @@ Install
 bower install zlib-asm
 ```
 
+```
+npm install zlib-asm
+```
+
 Use
 
 ```

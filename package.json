@@ -1,6 +1,6 @@
 {
   "name": "zlib-asm",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-exec": "~0.4.0",
@@ -10,5 +10,27 @@
     "grunt-cafe-mocha": "~0.1.10",
     "grunt-contrib-watch": "~0.5.3",
     "chai": "~1.8.1"
+  },
+  "description": "zlib for asm.js.",
+  "main": "zlib.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "grunt cafemocha:dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ukyo/zlib-asm.git"
+  },
+  "keywords": [
+    "zlib",
+    "emscripten",
+    "asmjs"
+  ],
+  "author": "Syu Kato",
+  "license": "zlib",
+  "bugs": {
+    "url": "https://github.com/ukyo/zlib-asm/issues"
   }
 }
