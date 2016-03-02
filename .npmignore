@@ -1,0 +1,8 @@
+zlib/
+bench/
+browserify/
+emscripten/
+dist/
+test/
+Makefile
+bower.json
