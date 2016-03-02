@@ -4,49 +4,53 @@ zlib for asm.js.
 
 ## Install and Use
 
-Install
+### bower
 
 ```
 bower install zlib-asm
 ```
 
 ```
+<script src="path/to/bower_components/zlib-asm/zlib.js"></script>
+```
+
+### npm
+
+```
 npm install zlib-asm
 ```
 
-Use
-
 ```
-<script src="path/to/bower_components/zlib-asm/zlib.js"></script>
+var zlib = require('zlib-asm');
 ```
 
 ## APIs
 
-### zlib.deflate(input, level, chunkSize)
+### zlib.deflate(input, compressionLevel, chunkSize)
 
 It compresses the byte array as a zlib stream.
 
-* @param *{Uint8Array}* input
-* @param *{number}* level (optional: default is `6`)
+* @param *{Uint8Array|Buffer}* input
+* @param *{number}* compressionLevel (optional: default is `6`)
 * @param *{number}* chunkSize (optional: default is `32768`)
-* @returns *{Uint8Array}*
+* @returns *{Uint8Array|Buffer}*
 
-### zlib.rawDeflate(input, level, chunkSize)
+### zlib.rawDeflate(input, compressionLevel, chunkSize)
 
 It compresses the byte array as a raw deflated stream.
 
-* @param *{Uint8Array}* input
-* @param *{number}* level (optional: default is `6`)
+* @param *{Uint8Array|Buffer}* input
+* @param *{number}* compressionLevel (optional: default is `6`)
 * @param *{number}* chunkSize (optional: default is `32768`)
-* @returns *{Uint8Array}*
+* @returns *{Uint8Array|Buffer}*
 
 ### zlib.inflate(input, chunkSize)
 
 It decompresses the zlib stream.
 
-* @param *{Uint8Array}* input
+* @param *{Uint8Array|Buffer}* input
 * @param *{number}* chunkSize (optional: default is `32768`)
-* @returns *{Uint8Array}*
+* @returns *{Uint8Array|Buffer}*
 
 
 
@@ -54,15 +58,15 @@ It decompresses the zlib stream.
 
 It decompresses the raw deflated stream.
 
-* @param *{Uint8Array}* input
+* @param *{Uint8Array|Buffer}* input
 * @param *{number}* chunkSize (optional: default is `32768`)
-* @returns *{Uint8Array}*
+* @returns *{Uint8Array|Buffer}*
 
-### zlib.stream.deflate({input, streamFn, level, shareMemory, chunkSize})
+### zlib.stream.deflate({input, streamFn, compressionLevel, shareMemory, chunkSize})
 
 * @param *{Uint8Array}* input
 * @param *{Function}* streamFn
-* @param *{number}* level (optional: default is `6`)
+* @param *{number}* compressionLevel (optional: default is `6`)
 * @param *{boolean}* shareMemory (optional: default is `false`)
 * @param *{number}* chunkSize (optional: default is `32768`)
 
@@ -77,11 +81,11 @@ zlib.stream.deflate({
 })
 ```
 
-### zlib.stream.rawDeflate({input, streamFn, level, shareMemory, chunkSize})
+### zlib.stream.rawDeflate({input, streamFn, compressionLevel, shareMemory, chunkSize})
 
 * @param *{Uint8Array}* input
 * @param *{Function}* streamFn
-* @param *{number}* level (optional: default is `6`)
+* @param *{number}* compressionLevel (optional: default is `6`)
 * @param *{boolean}* shareMemory (optional: default is `false`)
 * @param *{number}* chunkSize (optional: default is `32768`)
 
@@ -99,17 +103,41 @@ zlib.stream.deflate({
 * @param *{boolean}* shareMemory (optional: default is `false`)
 * @param *{number}* chunkSize (optional: default is `32768`)
 
+### zlib.createDeflateStream({compressionLevel, chunkSize})
+
+nodejs only.
+
+* @param *{number}* compressionLevel (optional: default is `6`)
+* @param *{number}* chunkSize (optional: default is `32768`)
+* @returns *{stream.Transform}*
+
+### zlib.createRawDeflateStream({compressionLevel, chunkSize})
+
+nodejs only.
+
+* @param *{number}* compressionLevel (optional: default is `6`)
+* @param *{number}* chunkSize (optional: default is `32768`)
+* @returns *{stream.Transform}*
+
+### zlib.createInflateStream({chunkSize})
+
+nodejs only.
+
+* @param *{number}* chunkSize (optional: default is `32768`)
+* @returns *{stream.Transform}*
+
+### zlib.createRawInflateStream({chunkSize})
+
+nodejs only.
+
+* @param *{number}* chunkSize (optional: default is `32768`)
+* @returns *{stream.Transform}*
+
 ## Development
 
-Install emsdk
+Install emsdk.
 
 [Emscripten SDK · kripken/emscripten Wiki](https://github.com/kripken/emscripten/wiki/Emscripten-SDK)
-
-Install grunt-cli.
-
-```
-npm install -g grunt-cli
-```
 
 Install npm packages.
 
@@ -117,22 +145,22 @@ Install npm packages.
 npm install
 ```
 
-Init zlib and dev dir.
+Init zlib.
 
 ```
-grunt init
+make init
 ```
 
-Write codes and test.
+Test.
 
 ```
-grunt watch
+make test
 ```
 
 Build for release.
 
 ```
-grunt release
+make
 ```
 
 ## Benchmark
