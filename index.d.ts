@@ -44,14 +44,14 @@ export interface BrowserDeflateStreamParams {
     input: Uint8Array
     streamFn: (chunk: Uint8Array) => any
     compressionLevel?: number
-    shareMemory?: false
+    shareMemory?: boolean
     chunkSize?: number
 }
 
 export interface BrowserInflateStreamParams {
     input: Uint8Array
     streamFn: (chunk: Uint8Array) => any
-    shareMemory?: false
+    shareMemory?: boolean
     chunkSize?: number
 }
 
