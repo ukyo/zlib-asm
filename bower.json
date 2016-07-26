@@ -1,6 +1,6 @@
 {
   "name": "zlib-asm",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "https://github.com/ukyo/zlib-asm",
   "authors": [
     "Syu Kato <ukyo.web@gmail.com>"
