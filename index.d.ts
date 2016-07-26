@@ -1,4 +1,3 @@
-/// <reference path="typings/index.d.ts" />
 export type Bytes = Uint8Array | Buffer;
 import {Transform} from 'stream';
 
