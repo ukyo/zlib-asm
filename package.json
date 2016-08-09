@@ -1,6 +1,6 @@
 {
   "name": "zlib-asm",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "devDependencies": {
     "browserify": "^13.0.0",
     "chai": "~1.8.1",
@@ -32,5 +32,8 @@
   "bugs": {
     "url": "https://github.com/ukyo/zlib-asm/issues"
   },
-  "typings": "index.d.ts"
+  "typings": "index.d.ts",
+  "dependencies": {
+    "@types/node": "^6.0.32"
+  }
 }
