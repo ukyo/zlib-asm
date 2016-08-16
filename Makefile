@@ -16,7 +16,7 @@ RELEASE_FLAGS=-O3 --memory-init-file 0 --closure 1 --llvm-lto 1 -s NO_FILESYSTEM
 
 
 BROWSERIFY=npm run browserify --
-BROWSERIFY_FLAGS=--no-builtins
+BROWSERIFY_FLAGS=--no-bundle-external --bare
 LICENSIFY=-p licensify
 MINIFYIFY=-p [minifyify --exclude=lib/Module.js --no-map]
 

@@ -24,7 +24,7 @@ function wrapForNode(fn) {
   };
 }
 
-if (typeof Buffer === 'function') {
+if (typeof process === 'object') {
   [
     'deflate',
     'rawDeflate',
