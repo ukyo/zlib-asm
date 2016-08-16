@@ -10,6 +10,7 @@
   },
   "description": "zlib for asm.js.",
   "main": "index.js",
+  "browser": "browser.js",
   "directories": {
     "test": "test"
   },
