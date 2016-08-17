@@ -1,6 +1,6 @@
-var common = require('../lib/common');
+var common = require('./lib/common');
 common.assign(
   module.exports,
-  require('../lib/def'),
-  require('../lib/inf')
+  require('./lib/def'),
+  require('./lib/inf')
 );
